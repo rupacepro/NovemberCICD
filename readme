@@ -1,0 +1,19 @@
+run "docker build -t cicd_node_app ."
+run "docker run -p 3000:3000 cicd_node_app"
+
+
+setting up env
+npm install dotenv
+create .env file
+add PORT=3000
+    NODE_ENV=development
+add require('dotenv').config(); in server.js
+we can access variables using "process.env.port"
+
+
+
+adding test
+npm install jest --save-dev
+npm install supertest --save-dev
+create a test in __test__/app.test.js
+update scripts in package.json
