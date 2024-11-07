@@ -4,9 +4,7 @@ pipeline {
     environment {
         // Define environment variables
         DOCKER_IMAGE = "cicd_node_app"
-        DOCKER_USERNAME = credentials('rupacepro-dockerhub').username  // Username
-        DOCKER_PASSWORD = credentials('rupacepro-dockerhub').password  // Password (Docker token)
-    }
+        }
 
     stages {
         // Stage 1: Clone Repository from GitHub
@@ -20,6 +18,13 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    // Retrieve Docker Hub credentials from Jenkins credentials store
+                    def dockerUsername = credentials('rupacepro-dockerhub').username
+                    def dockerPassword = credentials('rupacepro-dockerhub').password
+
+                    // Assign the credentials to environment variables
+                    env.DOCKER_USERNAME = dockerUsername
+                    env.DOCKER_PASSWORD = dockerPassword
                     // Build the Docker image
                     docker.build("${DOCKER_IMAGE}:${BUILD_ID}")
                 }
