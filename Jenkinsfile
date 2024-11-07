@@ -57,6 +57,8 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub_credentials', 
                                                     usernameVariable: 'DOCKER_USERNAME', 
                                                     passwordVariable: 'DOCKER_PASSWORD')]) {
+                        // Debugging step: Print the username to verify
+                echo "Docker Username: ${DOCKER_USERNAME}"
                                                         
                         // Login to Docker Hub securely using Jenkins credentials
                         bat "echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin"
