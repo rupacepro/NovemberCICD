@@ -37,9 +37,9 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
-                    // Running the Docker container and executing npm test
+                    // Run the tests inside the container using the updated path
                     bat """
-                        docker run --rm -t -v C:/ProgramData/Jenkins/.jenkins/workspace/NodeCI_CD_Pipeline:/workspace \
+                        docker run --rm -t -v C:/Users/rupac/Desktop/DevOps:/workspace \
                         -w /workspace \
                         cicd_node_app npm test
                     """
