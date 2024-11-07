@@ -24,36 +24,57 @@ resource "azurerm_subnet" "example" {
   address_prefixes     = ["10.0.1.0/24"]
 }
 
-# Public IP
-resource "azurerm_public_ip" "example" {
-  name                = "example-public-ip"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  allocation_method   = "Dynamic"
-}
-
 # Network Interface
 resource "azurerm_network_interface" "example" {
   name                = "example-nic"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
-  
-  # Use subnet block instead of subnet_id
+
   ip_configuration {
-    name                          = "internal"
-    subnet_id                     = azurerm_subnet.example.id  # Corrected syntax
-    private_ip_address_allocation = "Static"
-    public_ip_address_id          = azurerm_public_ip.example.id
+    name                          = "example-ipconfig"
+    subnet_id                    = azurerm_subnet.example.id
+    private_ip_address_allocation = "Dynamic"
   }
 }
 
 # Virtual Machine
 resource "azurerm_virtual_machine" "example" {
-  name                  = "example-vm"
-  resource_group_name   = azurerm_resource_group.example.name
-  location              = azurerm_resource_group.example.location
-  vm_size               = "Standard_B1ms" # Corrected argument name
-  network_interface_ids = [azurerm_network_interface.example.id]
-  
+  name                = "example-vm"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  network_interface_ids = [
+    azurerm_network_interface.example.id,
+  ]
+  vm_size             = "Standard_DS1_v2"
+
+  # OS Disk Configuration
+  storage_os_disk {
+    name              = "myosdisk1"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
+  }
+
+  # Image Reference (Windows Server 2019 Datacenter)
+  storage_image_reference {
+    publisher = "MicrosoftWindowsServer"
+    offer     = "WindowsServer"
+    sku       = "2019-Datacenter"
+    version   = "latest"
+  }
+
+  # OS Profile for Windows VM
   os_profile {
-    compute
+    computer_name  = "hostname"
+    admin_username = "adminuser"
+    admin_password = "P@ssw0rd!"
+  }
+
+  # Windows Configuration
+  os_profile_windows_config {
+    provision_vm_agent = true
+    winrm {
+      protocol = "http"
+    }
+  }
+}
