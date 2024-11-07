@@ -52,17 +52,17 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Login to Docker Hub
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
+                    // Login to Docker Hub using an Access Token
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-token-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_TOKEN')]) {
+                        sh "echo $DOCKER_TOKEN | docker login -u $DOCKER_USERNAME --password-stdin"
                     }
 
-                    
                     // Push the image to Docker Hub
                     docker.image("${DOCKER_IMAGE}").push()
                 }
             }
         }
+
 
         // Stage 5: Deploy Application (Optional)
         stage('Deploy') {
