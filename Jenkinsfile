@@ -54,11 +54,10 @@ pipeline {
             steps {
                 script {
                     // Login to Docker Hub securely using Jenkins credentials
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub_credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_TOKEN')]) {
-                        bat """
-                            echo $DOCKER_TOKEN | docker login -u $DOCKER_USERNAME --password-stdin
-                        """
+                    withCredentials([string(credentialsId: 'dockerhub', variable: 'DOCKER_TOKEN')]) {
+                        bat 'echo $DOCKER_TOKEN | docker login -u rupacepro --password-stdin'
                     }
+
 
                     // Push the image to Docker Hub (using the correct tag)
                     bat "docker push ${DOCKER_REGISTRY}/${DOCKER_USERNAME}/${DOCKER_IMAGE}:${BUILD_ID}"
