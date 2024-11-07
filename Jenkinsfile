@@ -29,9 +29,9 @@ pipeline {
             steps {
                 script {
                     // Run the tests using Jest
-                    docker.image("${DOCKER_IMAGE}").inside {
-                        sh 'npm install'
-                        sh 'npm test' // Assuming you are using Jest for testing
+                    docker.image("${DOCKER_IMAGE}").inside("-v ${WORKSPACE}:/workspace") {
+                        sh 'cd /workspace && npm install'
+                        sh 'cd /workspace && npm test' // Assuming you are using Jest for testing
                     }
                 }
             }
