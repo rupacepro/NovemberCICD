@@ -37,12 +37,11 @@ resource "azurerm_network_interface" "example" {
   name                = "example-nic"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
-  subnet_id           = azurerm_subnet.example.id
-  private_ip_address  = "10.0.1.4"
-
+  
+  # Use subnet block instead of subnet_id
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = azurerm_subnet.example.id
+    subnet_id                     = azurerm_subnet.example.id  # Corrected syntax
     private_ip_address_allocation = "Static"
     public_ip_address_id          = azurerm_public_ip.example.id
   }
@@ -57,31 +56,4 @@ resource "azurerm_virtual_machine" "example" {
   network_interface_ids = [azurerm_network_interface.example.id]
   
   os_profile {
-    computer_name  = "hostname"
-    admin_username = "adminuser"
-    admin_password = "password1234!"
-  }
-
-  os_profile_linux_config {
-    disable_password_authentication = false
-  }
-
-  storage_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
-  }
-
-  storage_os_disk {
-    name           = "example-os-disk"
-    caching        = "ReadWrite"
-    create_option  = "FromImage"
-    disk_size_gb   = 30
-  }
-}
-
-# Output VM Public IP
-output "public_ip" {
-  value = azurerm_public_ip.example.ip_address
-}
+    compute
