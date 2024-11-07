@@ -58,16 +58,16 @@ pipeline {
                                                        usernameVariable: 'DOCKER_USERNAME', 
                                                        passwordVariable: 'DOCKER_PASSWORD')]) {
                         
-                    // Use the credentials in a shell command
-                    sh '''
-                    echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-                    '''
+                        // Login to Docker Hub using credentials
+                        bat """
+                        echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin
+                        """
+                    }
 
-                    // Push the Docker image
+                    // Push the Docker image to Docker Hub
                     bat "docker push ${DOCKER_IMAGE}:${BUILD_ID}"
                 }
             }
-        }
         }
 
 
