@@ -7,13 +7,13 @@ pipeline {
         // dockerhub_credentials = credentials('rupacepro-dockerhub')
         }
 
-    // stages {
-    //     // Stage 1: Clone Repository from GitHub
-    //     stage('Checkout') {
-    //         steps {
-    //             checkout scm
-    //         }
-    //     }
+    stages {
+        // Stage 1: Clone Repository from GitHub
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
 
     //     stage('Terraform Init') {
     //         steps {
