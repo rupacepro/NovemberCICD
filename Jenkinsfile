@@ -53,7 +53,7 @@ pipeline {
             steps {
                 script {
                     // Login to Docker Hub using an Access Token
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-token-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_TOKEN')]) {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub_credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_TOKEN')]) {
                         sh "echo $DOCKER_TOKEN | docker login -u $DOCKER_USERNAME --password-stdin"
                     }
 
