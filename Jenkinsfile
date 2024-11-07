@@ -28,11 +28,12 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
-                    // Run the tests using Jest
-                    docker.image("${DOCKER_IMAGE}").inside("-v ${WORKSPACE}:/workspace") {
-                        sh 'cd /workspace && npm install'
-                        sh 'cd /workspace && npm test' // Assuming you are using Jest for testing
-                    }
+                    // Running the Docker container
+                    bat """
+                        docker run -d -t -v C:/ProgramData/Jenkins/.jenkins/workspace/NodeCI_CD_Pipeline:/workspace \
+                        -w C:/ProgramData/Jenkins/.jenkins/workspace/NodeCI_CD_Pipeline/ \
+                        rupacepro/cicd_node_app cmd.exe
+                    """
                 }
             }
         }
