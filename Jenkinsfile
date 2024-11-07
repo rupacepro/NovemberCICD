@@ -4,8 +4,8 @@ pipeline {
     environment {
         // Define environment variables
         DOCKER_IMAGE = "cicd_node_app"
-        DOCKER_USERNAME = credentials('rupacepro-dockerhub_usr')
-        DOCKER_PASSWORD = credentials('rupacepro-dockerhub_psw')
+        DOCKER_USERNAME = credentials('rupacepro-dockerhub').username  // Username
+        DOCKER_PASSWORD = credentials('rupacepro-dockerhub').password  // Password (Docker token)
     }
 
     stages {
