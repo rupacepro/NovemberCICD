@@ -21,14 +21,27 @@ resource "azurerm_subnet" "example" {
   address_prefixes     = ["10.0.1.0/24"]
 }
 
+resource "azurerm_network_interface" "example" {
+  name                = "example-nic"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                    = azurerm_subnet.example.id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+
 resource "azurerm_virtual_machine" "example" {
   name                  = "example-vm"
   resource_group_name   = azurerm_resource_group.example.name
   location              = azurerm_resource_group.example.location
   size                  = "Standard_B1ms"
   network_interface_ids = [azurerm_network_interface.example.id]
+  
   os_profile {
-    computer_name = "hostname"
+    computer_name  = "hostname"
     admin_username = "adminuser"
     admin_password = "password1234!"
   }
