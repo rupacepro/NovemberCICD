@@ -53,10 +53,15 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Login to Docker Hub
-                    bat """
-                        echo ${dockerhub_credentials.PASSWORD} | docker login -u ${dockerhub_credentials.USERNAME} --password-stdin
-                    """
+                    // Access DockerHub credentials securely from Jenkins
+                    withCredentials([usernamePassword(credentialsId: 'rupacepro-dockerhub', 
+                                                       usernameVariable: 'DOCKER_USERNAME', 
+                                                       passwordVariable: 'DOCKER_PASSWORD')]) {
+                        
+                    // Use the credentials in a shell command
+                    sh '''
+                    echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+                    '''
 
                     // Push the Docker image
                     bat "docker push ${DOCKER_IMAGE}:${BUILD_ID}"
