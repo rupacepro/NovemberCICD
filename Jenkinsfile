@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Define environment variables
         DOCKER_IMAGE = "rupacepro/cicd_node_app"
-        dockerhub_credentials = credentials('rupacepro-dockerhub')
+        // dockerhub_credentials = credentials('rupacepro-dockerhub')
         }
 
     stages {
