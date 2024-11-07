@@ -15,6 +15,30 @@ pipeline {
             }
         }
 
+        stage('Terraform Init') {
+            steps {
+                script {
+                    sh 'terraform init'
+                }
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                script {
+                    sh 'terraform plan'
+                }
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                script {
+                    sh 'terraform apply -auto-approve'
+                }
+            }
+        }
+
         // Stage 2: Build Docker Image
         stage('Build Docker Image') {
             steps {
@@ -50,25 +74,25 @@ pipeline {
 
 
        // Stage 5: Push Docker Image to Docker Hub
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    // Access DockerHub credentials securely from Jenkins
-                    withCredentials([usernamePassword(credentialsId: 'rupacepro-dockerhub', 
-                                                       usernameVariable: 'DOCKER_USERNAME', 
-                                                       passwordVariable: 'DOCKER_PASSWORD')]) {
+        // stage('Push Docker Image') {
+        //     steps {
+        //         script {
+        //             // Access DockerHub credentials securely from Jenkins
+        //             withCredentials([usernamePassword(credentialsId: 'rupacepro-dockerhub', 
+        //                                                usernameVariable: 'DOCKER_USERNAME', 
+        //                                                passwordVariable: 'DOCKER_PASSWORD')]) {
                         
-                        // Login to Docker Hub using credentials
-                        bat """
-                        echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin
-                        """
-                    }
+        //                 // Login to Docker Hub using credentials
+        //                 bat """
+        //                 echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin
+        //                 """
+        //             }
 
-                    // Push the Docker image to Docker Hub
-                    bat "docker push ${DOCKER_IMAGE}:${BUILD_ID}"
-                }
-            }
-        }
+        //             // Push the Docker image to Docker Hub
+        //             bat "docker push ${DOCKER_IMAGE}:${BUILD_ID}"
+        //         }
+        //     }
+        // }
 
 
 
