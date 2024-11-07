@@ -49,21 +49,21 @@ pipeline {
         }
 
 
-        // Stage 5: Push Docker Image to Docker Hub
+       // Stage 5: Push Docker Image to Docker Hub
         stage('Push Docker Image') {
             steps {
                 script {
                     // Login to Docker Hub securely using Jenkins credentials
                     withCredentials([string(credentialsId: 'dockerhub', variable: 'DOCKER_TOKEN')]) {
-                        bat 'echo $DOCKER_TOKEN | docker login -u rupacepro --password-stdin'
+                        bat 'echo %DOCKER_TOKEN% | docker login -u rupacepro --password-stdin'
                     }
-
 
                     // Push the image to Docker Hub (using the correct tag)
                     bat "docker push ${DOCKER_REGISTRY}/${DOCKER_USERNAME}/${DOCKER_IMAGE}:${BUILD_ID}"
                 }
             }
         }
+
 
 
         // Stage 5: Deploy Application (Optional)
