@@ -33,18 +33,20 @@ pipeline {
             }
         }
 
+        // Stage 3: Run Tests with Jest
         stage('Run Tests') {
             steps {
                 script {
-                    // Run the Docker container and execute Jest tests
+                    // Running the Docker container and executing npm test
                     bat """
                         docker run --rm -t -v C:/ProgramData/Jenkins/.jenkins/workspace/NodeCI_CD_Pipeline:/workspace \
                         -w /workspace \
-                        rupacepro/cicd_node_app npx jest
+                        cicd_node_app npm test
                     """
                 }
             }
         }
+
 
         // Stage 4: Push Docker Image to Docker Hub (Optional)
         stage('Push Docker Image') {
