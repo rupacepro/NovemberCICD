@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define environment variables
-        DOCKER_IMAGE = "rupacepro/cicd_node_app"
+        DOCKER_IMAGE = "cicd_node_app"
     }
 
     stages {
@@ -24,15 +24,24 @@ pipeline {
             }
         }
 
+        stage('Verify Docker Image') {
+            steps {
+                script {
+                    // List all Docker images to verify the image is built
+                    bat 'docker images'
+                }
+            }
+        }
+
         // Stage 3: Run Tests with Jest
         stage('Run Tests') {
             steps {
                 script {
-                    // Running the Docker container
+                    // Running the Docker container and executing Jest tests
                     bat """
-                        docker run -d -t -v C:/ProgramData/Jenkins/.jenkins/workspace/NodeCI_CD_Pipeline:/workspace \
-                        -w C:/ProgramData/Jenkins/.jenkins/workspace/NodeCI_CD_Pipeline/ \
-                        rupacepro/cicd_node_app cmd.exe
+                        docker run --rm -t -v C:/ProgramData/Jenkins/.jenkins/workspace/NodeCI_CD_Pipeline:/workspace \
+                        -w /workspace \
+                        rupacepro/cicd_node_app npm test
                     """
                 }
             }
