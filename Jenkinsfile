@@ -4,6 +4,7 @@ pipeline {
     environment {
         // Define environment variables
         DOCKER_IMAGE = "cicd_node_app"
+        DOCKER_REGISTRY = "docker.io"
     }
 
     stages {
@@ -48,17 +49,19 @@ pipeline {
         }
 
 
-        // Stage 4: Push Docker Image to Docker Hub (Optional)
+        // Stage 5: Push Docker Image to Docker Hub
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Login to Docker Hub using an Access Token
+                    // Login to Docker Hub securely using Jenkins credentials
                     withCredentials([usernamePassword(credentialsId: 'dockerhub_credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_TOKEN')]) {
-                        sh "echo $DOCKER_TOKEN | docker login -u $DOCKER_USERNAME --password-stdin"
+                        bat """
+                            echo $DOCKER_TOKEN | docker login -u $DOCKER_USERNAME --password-stdin
+                        """
                     }
 
-                    // Push the image to Docker Hub
-                    docker.image("${DOCKER_IMAGE}").push()
+                    // Push the image to Docker Hub (using the correct tag)
+                    bat "docker push ${DOCKER_REGISTRY}/${DOCKER_USERNAME}/${DOCKER_IMAGE}:${BUILD_ID}"
                 }
             }
         }
