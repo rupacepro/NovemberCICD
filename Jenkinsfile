@@ -7,37 +7,37 @@ pipeline {
         // dockerhub_credentials = credentials('rupacepro-dockerhub')
         }
 
-    stages {
-        // Stage 1: Clone Repository from GitHub
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
+    // stages {
+    //     // Stage 1: Clone Repository from GitHub
+    //     stage('Checkout') {
+    //         steps {
+    //             checkout scm
+    //         }
+    //     }
 
-        stage('Terraform Init') {
-            steps {
-                script {
-                    sh 'terraform init'
-                }
-            }
-        }
+    //     stage('Terraform Init') {
+    //         steps {
+    //             script {
+    //                 sh 'terraform init'
+    //             }
+    //         }
+    //     }
 
-        stage('Terraform Plan') {
-            steps {
-                script {
-                    sh 'terraform plan'
-                }
-            }
-        }
+    //     stage('Terraform Plan') {
+    //         steps {
+    //             script {
+    //                 sh 'terraform plan'
+    //             }
+    //         }
+    //     }
 
-        stage('Terraform Apply') {
-            steps {
-                script {
-                    sh 'terraform apply -auto-approve'
-                }
-            }
-        }
+    //     stage('Terraform Apply') {
+    //         steps {
+    //             script {
+    //                 sh 'terraform apply -auto-approve'
+    //             }
+    //         }
+    //     }
 
         // Stage 2: Build Docker Image
         stage('Build Docker Image') {
