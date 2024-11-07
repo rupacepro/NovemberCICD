@@ -2,18 +2,21 @@ provider "azurerm" {
   features {}
 }
 
+# Resource Group
 resource "azurerm_resource_group" "example" {
   name     = "example-resources"
   location = "East US"
 }
 
+# Virtual Network
 resource "azurerm_virtual_network" "example" {
-  name                = "example-network"
-  address_space       = ["10.0.0.0/16"]
+  name                = "example-vnet"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
+  address_space       = ["10.0.0.0/16"]
 }
 
+# Subnet
 resource "azurerm_subnet" "example" {
   name                 = "example-subnet"
   resource_group_name  = azurerm_resource_group.example.name
@@ -21,23 +24,36 @@ resource "azurerm_subnet" "example" {
   address_prefixes     = ["10.0.1.0/24"]
 }
 
+# Public IP
+resource "azurerm_public_ip" "example" {
+  name                = "example-public-ip"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  allocation_method   = "Dynamic"
+}
+
+# Network Interface
 resource "azurerm_network_interface" "example" {
   name                = "example-nic"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
+  subnet_id           = azurerm_subnet.example.id
+  private_ip_address  = "10.0.1.4"
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                    = azurerm_subnet.example.id
-    private_ip_address_allocation = "Dynamic"
+    subnet_id                     = azurerm_subnet.example.id
+    private_ip_address_allocation = "Static"
+    public_ip_address_id          = azurerm_public_ip.example.id
   }
 }
 
+# Virtual Machine
 resource "azurerm_virtual_machine" "example" {
   name                  = "example-vm"
   resource_group_name   = azurerm_resource_group.example.name
   location              = azurerm_resource_group.example.location
-  size                  = "Standard_B1ms"
+  vm_size               = "Standard_B1ms" # Corrected argument name
   network_interface_ids = [azurerm_network_interface.example.id]
   
   os_profile {
@@ -58,10 +74,14 @@ resource "azurerm_virtual_machine" "example" {
   }
 
   storage_os_disk {
-    name              = "example-os-disk"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed           = true
-    disk_size_gb      = 30
+    name           = "example-os-disk"
+    caching        = "ReadWrite"
+    create_option  = "FromImage"
+    disk_size_gb   = 30
   }
+}
+
+# Output VM Public IP
+output "public_ip" {
+  value = azurerm_public_ip.example.ip_address
 }
