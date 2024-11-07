@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install the dependencies (this will include Jest if it's in your package.json)
-RUN npm install
+RUN npm install && npm list --depth=0
 
 # Copy the rest of the application files into the container
 COPY . .
