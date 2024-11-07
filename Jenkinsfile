@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image
-                    docker.build("${DOCKER_IMAGE}")
+                    docker.build("${DOCKER_IMAGE}:${BUILD_ID}")
                 }
             }
         }
@@ -33,15 +33,14 @@ pipeline {
             }
         }
 
-        // Stage 3: Run Tests with Jest
         stage('Run Tests') {
             steps {
                 script {
-                    // Running the Docker container and executing Jest tests
+                    // Run the Docker container and execute Jest tests
                     bat """
                         docker run --rm -t -v C:/ProgramData/Jenkins/.jenkins/workspace/NodeCI_CD_Pipeline:/workspace \
                         -w /workspace \
-                        rupacepro/cicd_node_app npm test
+                        rupacepro/cicd_node_app npx jest
                     """
                 }
             }
