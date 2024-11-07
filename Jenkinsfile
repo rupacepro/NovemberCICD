@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define environment variables
-        DOCKER_IMAGE = "cicd_node_app"
+        DOCKER_IMAGE = "rupacepro/cicd_node_app"
         dockerhub_credentials = credentials('rupacepro-dockerhub')
         }
 
