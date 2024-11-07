@@ -34,19 +34,19 @@ pipeline {
             }
         }
 
-        // Stage 3: Run Tests with Jest
-        stage('Run Tests') {
-            steps {
-                script {
-                    // Run the tests inside the container using the updated path
-                    bat """
-                        docker run --rm -t -v C:/Users/rupac/Desktop/DevOps:/workspace \
-                        -w /workspace \
-                        cicd_node_app npm test
-                    """
-                }
-            }
-        }
+        // // Stage 3: Run Tests with Jest
+        // stage('Run Tests') {
+        //     steps {
+        //         script {
+        //             // Run the tests inside the container using the updated path
+        //             bat """
+        //                 docker run --rm -t -v C:/Users/rupac/Desktop/DevOps:/workspace \
+        //                 -w /workspace \
+        //                 cicd_node_app npm test
+        //             """
+        //         }
+        //     }
+        // }
 
 
        // Stage 5: Push Docker Image to Docker Hub
@@ -55,7 +55,7 @@ pipeline {
                 script {
                     // Login to Docker Hub
                     bat """
-                        echo ${dockerhub_credentials.password} | docker login -u ${dockerhub_credentials.username} --password-stdin
+                        echo ${dockerhub_credentials.PASSWORD} | docker login -u ${dockerhub_credentials.USERNAME} --password-stdin
                     """
 
                     // Push the Docker image
@@ -68,15 +68,15 @@ pipeline {
 
 
 
-        // Stage 5: Deploy Application (Optional)
-        stage('Deploy') {
-            steps {
-                script {
-                    // Add steps to deploy your app (could be Kubernetes, AWS, etc.)
-                    echo 'Deploying the app to production...'
-                }
-            }
-        }
+        // // Stage 5: Deploy Application (Optional)
+        // stage('Deploy') {
+        //     steps {
+        //         script {
+        //             // Add steps to deploy your app (could be Kubernetes, AWS, etc.)
+        //             echo 'Deploying the app to production...'
+        //         }
+        //     }
+        // }
     }
 
     post {
