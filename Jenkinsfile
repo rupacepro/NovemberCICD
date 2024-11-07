@@ -15,29 +15,35 @@ pipeline {
             }
         }
 
-    //     stage('Terraform Init') {
-    //         steps {
-    //             script {
-    //                 sh 'terraform init'
-    //             }
-    //         }
-    //     }
+        stage('Terraform Init') {
+            steps {
+                script {
+                    dir('terraform') {
+                         sh 'terraform init'
+                    }
+                }
+            }
+        }
 
-    //     stage('Terraform Plan') {
-    //         steps {
-    //             script {
-    //                 sh 'terraform plan'
-    //             }
-    //         }
-    //     }
+        stage('Terraform Plan') {
+            steps {
+                script {
+                    dir('terraform') {
+                         sh 'terraform plan'
+                    }
+                }
+            }
+        }
 
-    //     stage('Terraform Apply') {
-    //         steps {
-    //             script {
-    //                 sh 'terraform apply -auto-approve'
-    //             }
-    //         }
-    //     }
+        stage('Terraform Apply') {
+            steps {
+                script {
+                    dir('terraform') {
+                         sh 'terraform apply -auto-approve'
+                    }
+                }
+            }
+        }
 
         // Stage 2: Build Docker Image
         stage('Build Docker Image') {
